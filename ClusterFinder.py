@@ -1,23 +1,27 @@
+#!/usr/bin/python
 ##############################################################################
 #                    ClusterFinder - main script                             #
 #                       Peter Cimermancic                                    #
 ##############################################################################
 
-
-PATH = './scr'
+import os
 import sys
+PATH = os.path.dirname(os.path.realpath(sys.argv[0])) + '/scr'
 sys.path.append(PATH)
 from Predict import *
 from FindClusters import *
 import re
 
 
-organism_name = 'example_org'
-input_file = 'example_input.txt'
+#organism_name = 'example_org'
+#input_file = 'example_input.txt'
+
+organism_name = sys.argv[1]
+input_file = sys.argv[2]
 
 # --- read in the HMM model data
-PATH_TO_FREQUENCIES = './freqdata/' # link to where the frequencies are
-PATH_TO_DATA = './data/'
+PATH_TO_FREQUENCIES = os.path.dirname(os.path.realpath(sys.argv[0])) + '/freqdata/' # link to where the frequencies are
+PATH_TO_DATA = os.path.dirname(os.path.realpath(sys.argv[0])) + '/data/'
 
 out4 = open(PATH_TO_FREQUENCIES + 'TP_arr_A_latest.pkl','rb')
 out5 = open(PATH_TO_FREQUENCIES + 'NewTS_all_B_reduced_6filter.pkl','rb')
@@ -40,7 +44,7 @@ out7.close()
 Costumize according to your input.
 '''
 
-data = open(PATH_TO_DATA+input_file)
+data = open(input_file)
 D = data.readlines()
 data.close()
 
@@ -87,7 +91,7 @@ data.close()
 
 
 # --- run clustering method
-Clusters, OrgName = get_clusters(PATH_TO_DATA+organism_name+'.out',X=2,TRSH=0.2)
+Clusters, OrgName = get_clusters(organism_name+'.out',X=2,TRSH=0.2)
 CLUSTERS = [] # store the new clusters
 for clstr in Clusters:
 	pfams =  set([i[-4] for i in clstr])
@@ -96,7 +100,7 @@ for clstr in Clusters:
 
 
 # --- write the data (in ClusterFinder format)
-output = open(PATH_TO_DATA+organism_name+'.clusters.out','w')
+output = open(organism_name+'.clusters.out','w')
 for x,clstr in enumerate(CLUSTERS):
 	for domain in clstr:
 		output.write('\t'.join([str(j) for j in [organism_name+'_'+str(x)]+domain])+'\n')
