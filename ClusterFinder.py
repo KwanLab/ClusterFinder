@@ -91,7 +91,7 @@ data.close()
 
 
 # --- run clustering method
-Clusters, OrgName = get_clusters(organism_name+'.out',X=2,TRSH=0.2)
+Clusters, OrgName = get_clusters(PATH_TO_DATA+organism_name+'.out',X=2,TRSH=0.2)
 CLUSTERS = [] # store the new clusters
 for clstr in Clusters:
 	pfams =  set([i[-4] for i in clstr])
